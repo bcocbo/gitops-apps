@@ -1,16 +1,5 @@
-# macOS
-.DS_Store
-
-# Editor files
-*.swp
-*.swo
-*~
-.vscode/
-.idea/
-
-# Temporary files
-*.tmp
-*.bak
-
-# Logs
+node_modules/
+dist/
+.env
 *.log
+.DS_Store
