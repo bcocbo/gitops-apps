@@ -1,0 +1,2 @@
+# Este directorio contendrá los values de aplicaciones en staging
+# Estructura: staging/{app-name}/values.yaml

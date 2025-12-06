@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: staging
+  namespace: argocd
+spec:
+  description: Proyecto para aplicaciones de staging
+  
+  # Repositorios permitidos
+  sourceRepos:
+    - 'https://github.com/bcocbo/*'
+    - '*'
+  
+  # Destinos permitidos
+  destinations:
+    - namespace: 'staging'
+      server: https://kubernetes.default.svc
+    - namespace: 'staging-*'
+      server: https://kubernetes.default.svc
+  
+  # Recursos permitidos
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+  
+  namespaceResourceWhitelist:
+    - group: ''
+      kind: '*'
+    - group: 'apps'
+      kind: '*'
+    - group: 'batch'
+      kind: '*'
+    - group: 'networking.k8s.io'
+      kind: '*'
+    - group: 'autoscaling'
+      kind: '*'
+  
+  # Políticas de sincronización
+  syncWindows:
+    - kind: allow
+      schedule: '* * * * *'
+      duration: 24h
+      applications:
+        - '*'

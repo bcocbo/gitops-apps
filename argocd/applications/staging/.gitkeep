@@ -1,0 +1,2 @@
+# Este directorio contendrá las definiciones de ArgoCD Applications para staging
+# Estructura: staging/{app-name}.yaml

@@ -1,0 +1,2 @@
+# Este directorio contendrá las definiciones de ArgoCD Applications para producción
+# Estructura: prod/{app-name}.yaml

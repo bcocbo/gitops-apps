@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: prod
+  namespace: argocd
+spec:
+  description: Proyecto para aplicaciones de producción
+  
+  # Repositorios permitidos
+  sourceRepos:
+    - 'https://github.com/bcocbo/*'
+  
+  # Destinos permitidos
+  destinations:
+    - namespace: 'prod'
+      server: https://kubernetes.default.svc
+    - namespace: 'prod-*'
+      server: https://kubernetes.default.svc
+  
+  # Recursos permitidos
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+  
+  namespaceResourceWhitelist:
+    - group: ''
+      kind: '*'
+    - group: 'apps'
+      kind: '*'
+    - group: 'batch'
+      kind: '*'
+    - group: 'networking.k8s.io'
+      kind: '*'
+    - group: 'autoscaling'
+      kind: '*'
+  
+  # Políticas de sincronización - Más restrictivo para producción
+  syncWindows:
+    - kind: allow
+      schedule: '0 2 * * *'  # Solo entre 2-6 AM
+      duration: 4h
+      applications:
+        - '*'
+    - kind: deny
+      schedule: '0 6 * * *'  # Bloqueado el resto del día
+      duration: 20h
+      applications:
+        - '*'

@@ -1,0 +1,2 @@
+# Este directorio contendrá los values de aplicaciones en producción
+# Estructura: prod/{app-name}/values.yaml
