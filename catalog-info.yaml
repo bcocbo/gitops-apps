@@ -1,12 +1,12 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: test-app03
+  name: test-app06
   description: Aplicación desplegada con ArgoCD y GitOps
   annotations:
-    github.com/project-slug: bcocbo/test-app03
-    backstage.io/kubernetes-id: test-app03
-    argocd/app-name: test-app03
+    github.com/project-slug: bcocbo/test-app06
+    backstage.io/kubernetes-id: test-app06
+    argocd/app-name: test-app06
     argocd/app-namespace: argocd
   tags:
     - argocd
@@ -14,10 +14,10 @@ metadata:
     - gitops
     - dev
   links:
-    - url: https://argocd.example.com/applications/test-app03
+    - url: https://argocd.example.com/applications/test-app06
       title: ArgoCD Application
       icon: dashboard
-    - url: https://github.com/bcocbo/gitops-apps/tree/main/values/dev/test-app03
+    - url: https://github.com/bcocbo/gitops-apps/tree/main/values/dev/test-app06
       title: GitOps Config
       icon: code
 spec:
