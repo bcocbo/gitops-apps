@@ -1,50 +1,56 @@
 
 # Build stage
-FROM node:20-alpine AS builder
+FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
-# Copiar package files
-COPY package*.json ./
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
 
-# Instalar dependencias
-RUN npm ci --only=production
+# Copiar requirements
+COPY requirements.txt .
+
+# Instalar dependencias de Python
+RUN pip install --no-cache-dir --user -r requirements.txt
+
+# Production stage
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copiar dependencias desde builder
+COPY --from=builder /root/.local /root/.local
 
 # Copiar código fuente
 COPY . .
 
-# Production stage
-FROM node:20-alpine
-
-WORKDIR /app
-
-# Copiar dependencias y código desde builder
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app .
-
 # Usuario no-root
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001 && \
-    chown -R nodejs:nodejs /app
+RUN useradd -m -u 1001 appuser && \
+    chown -R appuser:appuser /app
 
-USER nodejs
+USER appuser
+
+# Agregar .local/bin al PATH
+ENV PATH=/root/.local/bin:$PATH
 
 # Exponer puerto
-EXPOSE 3000
+EXPOSE 8000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node healthcheck.js || exit 1
+  CMD python healthcheck.py || exit 1
 
 # Comando de inicio
-CMD ["node", "index.js"]
+CMD ["python", "app.py"]
 
 
 
 # Metadata común
-LABEL app.name="test-app03"
+LABEL app.name="test-app07"
 LABEL app.environment="dev"
 LABEL app.type="custom"
 
-LABEL app.language="nodejs"
+LABEL app.language="python"
 
