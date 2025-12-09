@@ -1,16 +1,16 @@
-# test-app02
+# test-app03
 
 Aplicación desplegada con ArgoCD y GitOps
 
 ## Información del Despliegue
 
-- **Tipo**: prebuilt
+- **Tipo**: custom (nodejs)
 - **Namespace**: `dev`
 - **Entorno**: `dev`
 
-- **Imagen**: `nginxdemos/hello:latest`
+- **Imagen**: Construida automáticamente por CI/CD
 
-- **Réplicas**: 1
+- **Réplicas**: 2
 
 ## Despliegue con ArgoCD
 
@@ -20,31 +20,56 @@ Esta aplicación se despliega automáticamente usando ArgoCD y GitOps.
 
 ```bash
 # Ver el estado de la aplicación en ArgoCD
-argocd app get test-app02
+argocd app get test-app03
 
 # Ver los pods desplegados
-kubectl get pods -n dev -l app=test-app02
+kubectl get pods -n dev -l app=test-app03
 
 # Ver los logs
-kubectl logs -n dev -l app=test-app02 --tail=50
+kubectl logs -n dev -l app=test-app03 --tail=50
 ```
 
 ### Acceder a la Aplicación
 
 ```bash
 # Port forward para acceso local
-kubectl port-forward -n dev svc/test-app02 8080:80
+kubectl port-forward -n dev svc/test-app03 8080:80
 
 # Luego visita: http://localhost:8080
 ```
 
 
+## CI/CD Automático
+
+El pipeline de CI/CD se ejecuta automáticamente en cada push a `main`:
+
+### Flujo Automático
+1. **Build**: Construye la imagen Docker
+2. **Push**: Sube la imagen a Amazon ECR
+3. **Update**: Actualiza el tag en el repositorio GitOps
+4. **Deploy**: ArgoCD detecta el cambio y despliega automáticamente
+
+### Configuración Requerida
+
+Antes de hacer push, configura los secretos de GitHub:
+- `AWS_ROLE_ARN` - Rol de IAM para acceder a ECR
+- `GITOPS_TOKEN` - Token para crear PRs en gitops-apps
+
+Ver `.github/SETUP.md` para instrucciones detalladas.
+
+### Tags de Imagen
+
+Las imágenes se etiquetan con: `{branch}-{short-sha}-{run-number}`
+
+Ejemplo: `main-a1b2c3d-42`
+
 ## Actualizar la Aplicación
 
-Esta aplicación usa una imagen preconstruida. Para actualizar:
+### Opción 1: Automática (Recomendada)
+Simplemente haz push de tus cambios a `main` y el CI/CD se encargará del resto.
 
-1. Modifica el `imageTag` en el [repositorio GitOps](https://github.com/bcocbo/gitops-apps/tree/main/values/dev/test-app02)
-2. ArgoCD detectará el cambio y desplegará la nueva versión automáticamente
+### Opción 2: Manual
+Modifica los values en el [repositorio GitOps](https://github.com/bcocbo/gitops-apps) y ArgoCD sincronizará automáticamente.
 
 
 

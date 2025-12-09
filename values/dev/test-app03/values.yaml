@@ -1,0 +1,75 @@
+# Values para test-app03 en dev
+# Generado automáticamente por Backstage
+# Tipo: 
+
+replicaCount: 2
+
+image:
+
+  # Imagen custom - será actualizada por CI/CD
+  repository: YOUR_AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/test-app03
+  tag: latest
+
+  pullPolicy: Always
+
+nameOverride: "test-app03"
+fullnameOverride: "test-app03"
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations: {}
+  hosts:
+    - host: test-app03-dev.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 5
+
+env: []
+
+configMap:
+  enabled: false
+  data: {}
+
+secret:
+  enabled: false
+  data: {}
