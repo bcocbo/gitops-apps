@@ -1,6 +1,5 @@
-
 {
-  "name": "test-app03",
+  "name": "test-app04",
   "version": "1.0.0",
   "description": "Aplicación desplegada con ArgoCD y GitOps",
   "main": "index.js",
@@ -19,4 +18,3 @@
     "nodemon": "^3.0.1"
   }
 }
-
