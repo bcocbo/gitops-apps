@@ -1,4 +1,3 @@
-
 const http = require('http');
 
 const options = {
@@ -23,4 +22,3 @@ request.on('error', (err) => {
 });
 
 request.end();
-
