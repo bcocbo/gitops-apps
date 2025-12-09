@@ -4,7 +4,7 @@ metadata:
   name: test-app03
   description: Aplicación desplegada con ArgoCD y GitOps
   annotations:
-    github.com/project-slug: bcocbo/test-app03
+    github.com/project-slug: bcocbo/test-app003
     backstage.io/kubernetes-id: test-app03
     argocd/app-name: test-app03
     argocd/app-namespace: argocd

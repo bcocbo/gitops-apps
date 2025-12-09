@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -40,4 +39,3 @@ process.on('SIGINT', () => {
   console.log('SIGINT signal received: closing HTTP server');
   process.exit(0);
 });
-

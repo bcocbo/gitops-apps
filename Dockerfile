@@ -8,7 +8,12 @@ WORKDIR /app
 COPY package*.json ./
 
 # Instalar dependencias
-RUN npm ci --only=production
+# Usar npm ci si existe package-lock.json, sino npm install
+RUN if [ -f package-lock.json ]; then \
+      npm ci --only=production; \
+    else \
+      npm install --only=production; \
+    fi
 
 # Copiar código fuente
 COPY . .
@@ -18,9 +23,10 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copiar dependencias y código desde builder
+# Copiar node_modules y código desde builder
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app .
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/*.js ./
 
 # Usuario no-root
 RUN addgroup -g 1001 -S nodejs && \
