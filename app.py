@@ -7,7 +7,7 @@ app = Flask(__name__)
 @app.route('/')
 def hello():
     return jsonify({
-        'message': '¡Hola Mundo desde test-008app!',
+        'message': '¡Hola Mundo desde myapp-009!',
         'description': 'Aplicación desplegada con ArgoCD y GitOps',
         'environment': 'dev',
         'timestamp': datetime.now().isoformat(),
@@ -18,14 +18,14 @@ def hello():
 def health():
     return jsonify({
         'status': 'healthy',
-        'service': 'test-008app',
+        'service': 'myapp-009',
         'timestamp': datetime.now().isoformat()
     })
 
 @app.route('/info')
 def info():
     return jsonify({
-        'name': 'test-008app',
+        'name': 'myapp-009',
         'description': 'Aplicación desplegada con ArgoCD y GitOps',
         'environment': 'dev',
         'language': 'Python',
@@ -36,7 +36,7 @@ def info():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8000))
     print('=' * 50)
-    print(f'🚀 test-008app iniciando...')
+    print(f'🚀 myapp-009 iniciando...')
     print(f'📊 Entorno: dev')
     print(f'🌐 Puerto: {port}')
     print(f'✅ Health check: http://localhost:{port}/health')

@@ -14,9 +14,9 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: test-008app
+  ECR_REPOSITORY: myapp-009
   GITOPS_REPO: bcocbo/gitops-apps
-  APP_NAME: test-008app
+  APP_NAME: myapp-009
   ENVIRONMENT: dev
 
 jobs:
