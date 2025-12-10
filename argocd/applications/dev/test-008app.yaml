@@ -13,15 +13,16 @@ spec:
   
   sources:
     - repoURL: https://github.com/bcocbo/eks_baseline_chart_Helm
-      targetRevision: HEAD
       path: .
+      targetRevision: HEAD
       helm:
-        releaseName: test-008app
         valueFiles:
-          - $values/values/dev/test-008app/values.yaml
+          - $values/values.yaml
+        releaseName: test-008app
     - repoURL: https://github.com/bcocbo/gitops-apps
       targetRevision: HEAD
       ref: values
+      path: values/dev/test-008app
   
   destination:
     server: https://kubernetes.default.svc
