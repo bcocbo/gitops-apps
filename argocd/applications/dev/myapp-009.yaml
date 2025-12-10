@@ -16,12 +16,12 @@ spec:
       targetRevision: HEAD
       path: .
       helm:
-        releaseName: test-008app
+        releaseName: myapp-009
         valueFiles:
-          - $values/gitops-values/values/dev/test-008app/values.yaml
+          - $values/values/dev/myapp-009/values.yaml
     - repoURL: https://github.com/bcocbo/gitops-apps
       targetRevision: HEAD
-      ref: gitops-values
+      ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: dev
