@@ -3,28 +3,21 @@
 # Tipo: 
 
 replicaCount: 1
-
 image:
-
   # Imagen custom - será actualizada por CI/CD
   repository: 226633502530.dkr.ecr.us-east-1.amazonaws.com/myapp-009
-  tag: latest
-
+  tag: main-22ee730-1
   pullPolicy: Always
-
 nameOverride: "myapp-009"
 fullnameOverride: "myapp-009"
-
 serviceAccount:
   create: true
   annotations: {}
   name: ""
-
 service:
   type: ClusterIP
   port: 80
   targetPort: 80
-
 ingress:
   enabled: false
   className: "nginx"
@@ -35,7 +28,6 @@ ingress:
         - path: /
           pathType: Prefix
   tls: []
-
 resources:
   limits:
     cpu: 500m
@@ -43,33 +35,27 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
-
 autoscaling:
   enabled: false
   minReplicas: 2
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
-
 livenessProbe:
   httpGet:
     path: /healthz
     port: http
   initialDelaySeconds: 30
   periodSeconds: 10
-
 readinessProbe:
   httpGet:
     path: /ready
     port: http
   initialDelaySeconds: 10
   periodSeconds: 5
-
 env: []
-
 configMap:
   enabled: false
   data: {}
-
 secret:
   enabled: false
   data: {}
