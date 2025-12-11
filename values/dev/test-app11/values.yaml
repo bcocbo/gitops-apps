@@ -3,28 +3,21 @@
 # Tipo: 
 
 replicaCount: 1
-
 image:
-
   # Imagen custom - será actualizada por CI/CD
   repository: 226633502530.dkr.ecr.us-east-1.amazonaws.com/test-app11
-  tag: latest
-
+  tag: main-cd73efc-41
   pullPolicy: Always
-
 nameOverride: "test-app11"
 fullnameOverride: "test-app11"
-
 serviceAccount:
   create: true
   annotations: {}
   name: ""
-
 service:
   type: ClusterIP
   port: 80
   targetPort: 8000
-
 ingress:
   enabled: false
   className: "nginx"
@@ -35,7 +28,6 @@ ingress:
         - path: /
           pathType: Prefix
   tls: []
-
 resources:
   limits:
     cpu: 500m
@@ -43,13 +35,11 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
-
 autoscaling:
   enabled: false
   minReplicas: 2
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
-
 livenessProbe:
   httpGet:
     path: /health
@@ -57,7 +47,6 @@ livenessProbe:
   initialDelaySeconds: 30
   periodSeconds: 10
   failureThreshold: 3
-
 readinessProbe:
   httpGet:
     path: /health
@@ -65,13 +54,10 @@ readinessProbe:
   initialDelaySeconds: 10
   periodSeconds: 5
   failureThreshold: 3
-
 env: []
-
 configMap:
   enabled: false
   data: {}
-
 secret:
   enabled: false
   data: {}
