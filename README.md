@@ -1,4 +1,4 @@
-# myapp-009
+# test-app10
 
 Aplicación desplegada con ArgoCD y GitOps
 
@@ -20,20 +20,20 @@ Esta aplicación se despliega automáticamente usando ArgoCD y GitOps.
 
 ```bash
 # Ver el estado de la aplicación en ArgoCD
-argocd app get myapp-009
+argocd app get test-app10
 
 # Ver los pods desplegados
-kubectl get pods -n dev -l app=myapp-009
+kubectl get pods -n dev -l app=test-app10
 
 # Ver los logs
-kubectl logs -n dev -l app=myapp-009 --tail=50
+kubectl logs -n dev -l app=test-app10 --tail=50
 ```
 
 ### Acceder a la Aplicación
 
 ```bash
 # Port forward para acceso local
-kubectl port-forward -n dev svc/myapp-009 8080:80
+kubectl port-forward -n dev svc/test-app10 8080:80
 
 # Luego visita: http://localhost:8080
 ```
