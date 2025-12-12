@@ -87,7 +87,7 @@ Token de GitHub con permisos para crear PRs en el repositorio GitOps.
 ```bash
 # Crear repositorio en ECR
 aws ecr create-repository \
-  --repository-name test-app11 \
+  --repository-name tes-app-123 \
   --region us-east-1 \
   --image-scanning-configuration scanOnPush=true \
   --encryption-configuration encryptionType=AES256
@@ -113,7 +113,7 @@ cat > lifecycle-policy.json <<EOF
 EOF
 
 aws ecr put-lifecycle-policy \
-  --repository-name test-app11 \
+  --repository-name tes-app-123 \
   --lifecycle-policy-text file://lifecycle-policy.json
 ```
 
@@ -146,7 +146,7 @@ aws iam create-open-id-connect-provider \
    git push origin main
    
    # Ver el workflow en GitHub Actions
-   # https://github.com/bcocbo/test-app11/actions
+   # https://github.com/bcocbo/tes-app-123/actions
    ```
 
 ## 📊 Flujo del Workflow
