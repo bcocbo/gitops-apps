@@ -48,7 +48,7 @@ CMD ["python", "app.py"]
 
 
 # Metadata común
-LABEL app.name="tes-app-123"
+LABEL app.name="testapp-001f"
 LABEL app.environment="dev"
 LABEL app.type="custom"
 
