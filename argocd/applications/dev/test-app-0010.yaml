@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: test-app-0010
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    environment: dev
+    managed-by: backstage
+spec:
+  project: dev
+  
+  sources:
+    - repoURL: https://github.com/bcocbo/eks_baseline_chart_Helm
+      targetRevision: HEAD
+      path: .
+      helm:
+        releaseName: test-app-0010
+        valueFiles:
+          - $values/values/dev/test-app-0010/values.yaml
+    - repoURL: https://github.com/bcocbo/gitops-apps
+      targetRevision: HEAD
+      ref: values
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: dev
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m

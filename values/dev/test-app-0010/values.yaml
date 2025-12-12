@@ -1,0 +1,126 @@
+# Values para test-app-0010 en dev
+# Generado automáticamente por Backstage
+# Tipo: 
+
+# =============================================================================
+# MICROSERVICE CONFIGURATION
+# =============================================================================
+microservice:
+  name: "test-app-0010"
+  namespace: "dev"
+
+  image: "226633502530.dkr.ecr.us-east-1.amazonaws.com/test-app-0010:latest"
+
+  port: 8000
+  replicas: 2
+  
+  # Service Account
+  serviceAccountName: "default"
+  automountServiceAccountToken: false
+  
+  # Flags de características
+  flags:
+    openTelemetry: false
+  
+  # Seguridad (configurado para Python apps non-root)
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    fsGroup: 1001
+    seccompProfile: "RuntimeDefault"
+    capabilities:
+      drop:
+        - ALL
+  
+  # Recursos
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  
+  # Health checks configurados para Python Flask
+  probes:
+    liveness:
+      enabled: true
+      httpGet:
+        path: /health
+        port: 8000
+        scheme: HTTP
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    
+    readiness:
+      enabled: true
+      httpGet:
+        path: /health
+        port: 8000
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 3
+    
+    startup:
+      enabled: false
+  
+  # Etiquetas estándar
+  labels:
+    app: "test-app-0010"
+    environment: "dev"
+    team: "platform"
+    costCenter: "engineering"
+    applicationCode: "test-app-0010"
+    projectName: "backstage-apps"
+    pmo: "platform-team"
+    responsible: "devops"
+  
+  # Estrategia de despliegue
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+# =============================================================================
+# SERVICE CONFIGURATION
+# =============================================================================
+service:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+      portName: http
+
+# =============================================================================
+# CONFIGMAP CONFIGURATION
+# =============================================================================
+configmap:
+  enabled: true
+  data:
+    ENVIRONMENT: "dev"
+    APP_NAME: "test-app-0010"
+
+# =============================================================================
+# HPA CONFIGURATION
+# =============================================================================
+hpa:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+# =============================================================================
+# ISTIO CONFIGURATION (disabled by default)
+# =============================================================================
+gateway:
+  enabled: false
+
+virtualService:
+  enabled: false
