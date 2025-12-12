@@ -1,4 +1,4 @@
-# test-poc-001
+# test-app-poc
 
 Aplicación desplegada con ArgoCD y GitOps
 
@@ -10,7 +10,7 @@ Aplicación desplegada con ArgoCD y GitOps
 
 - **Imagen**: Construida automáticamente por CI/CD
 
-- **Réplicas**: 2
+- **Réplicas**: 1
 
 ## Despliegue con ArgoCD
 
@@ -20,20 +20,20 @@ Esta aplicación se despliega automáticamente usando ArgoCD y GitOps.
 
 ```bash
 # Ver el estado de la aplicación en ArgoCD
-argocd app get test-poc-001
+argocd app get test-app-poc
 
 # Ver los pods desplegados
-kubectl get pods -n dev -l app=test-poc-001
+kubectl get pods -n dev -l app=test-app-poc
 
 # Ver los logs
-kubectl logs -n dev -l app=test-poc-001 --tail=50
+kubectl logs -n dev -l app=test-app-poc --tail=50
 ```
 
 ### Acceder a la Aplicación
 
 ```bash
 # Port forward para acceso local
-kubectl port-forward -n dev svc/test-poc-001 8080:80
+kubectl port-forward -n dev svc/test-app-poc 8080:80
 
 # Luego visita: http://localhost:8080
 ```
