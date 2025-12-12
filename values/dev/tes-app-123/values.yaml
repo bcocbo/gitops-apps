@@ -8,20 +8,15 @@
 microservice:
   name: "tes-app-123"
   namespace: "dev"
-
-  image: "226633502530.dkr.ecr.us-east-1.amazonaws.com/tes-app-123:latest"
-
+  image: "226633502530.dkr.ecr.us-east-1.amazonaws.com/tes-app-123:main-d7ce6d2-44"
   port: 8000
   replicas: 1
-  
   # Service Account
   serviceAccountName: "default"
   automountServiceAccountToken: false
-  
   # Flags de características
   flags:
     openTelemetry: false
-  
   # Seguridad (configurado para Python apps non-root)
   securityContext:
     runAsNonRoot: true
@@ -32,7 +27,6 @@ microservice:
     capabilities:
       drop:
         - ALL
-  
   # Recursos
   resources:
     limits:
@@ -41,7 +35,6 @@ microservice:
     requests:
       cpu: 100m
       memory: 128Mi
-  
   # Health checks configurados para Python Flask
   probes:
     liveness:
@@ -54,7 +47,6 @@ microservice:
       periodSeconds: 10
       timeoutSeconds: 5
       failureThreshold: 3
-    
     readiness:
       enabled: true
       httpGet:
@@ -65,10 +57,8 @@ microservice:
       periodSeconds: 5
       timeoutSeconds: 3
       failureThreshold: 3
-    
     startup:
       enabled: false
-  
   # Etiquetas estándar
   labels:
     app: "tes-app-123"
@@ -79,14 +69,12 @@ microservice:
     projectName: "backstage-apps"
     pmo: "platform-team"
     responsible: "devops"
-  
   # Estrategia de despliegue
   strategy:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 0
-
 # =============================================================================
 # SERVICE CONFIGURATION
 # =============================================================================
@@ -97,7 +85,6 @@ service:
       port: 80
       targetPort: 8000
       portName: http
-
 # =============================================================================
 # CONFIGMAP CONFIGURATION
 # =============================================================================
@@ -106,7 +93,6 @@ configmap:
   data:
     ENVIRONMENT: "dev"
     APP_NAME: "tes-app-123"
-
 # =============================================================================
 # HPA CONFIGURATION
 # =============================================================================
@@ -115,12 +101,10 @@ hpa:
   minReplicas: 2
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
-
 # =============================================================================
 # ISTIO CONFIGURATION (disabled by default)
 # =============================================================================
 gateway:
   enabled: false
-
 virtualService:
   enabled: false
