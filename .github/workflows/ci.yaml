@@ -14,9 +14,9 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: test-app11
+  ECR_REPOSITORY: tes-app-123
   GITOPS_REPO: bcocbo/gitops-apps
-  APP_NAME: test-app11
+  APP_NAME: tes-app-123
   ENVIRONMENT: dev
 
 jobs:
@@ -107,39 +107,19 @@ jobs:
           
           if [ -f "$VALUES_FILE" ]; then
             echo "📝 Actualizando values.yaml existente..."
-            # Actualizar image tag
-            yq eval ".image.repository = \"${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}\"" -i "$VALUES_FILE"
-            yq eval ".image.tag = \"${{ env.IMAGE_TAG }}\"" -i "$VALUES_FILE"
+            # Actualizar microservice.image con la imagen completa (repo:tag)
+            yq eval ".microservice.image = \"${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}\"" -i "$VALUES_FILE"
           else
-            echo "📝 Creando nuevo values.yaml..."
-            # Crear archivo values.yaml desde cero
+            echo "⚠️  Values file no encontrado. Debería haber sido creado por Backstage."
+            echo "Creando values.yaml básico..."
             cat > "$VALUES_FILE" << EOF
           # Values for ${{ env.APP_NAME }}
-          image:
-            repository: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}
-            tag: ${{ env.IMAGE_TAG }}
-            pullPolicy: IfNotPresent
-          
-          replicaCount: 2
-          
-          service:
-            type: ClusterIP
-            port: 80
-            targetPort: 8000
-          
-          resources:
-            limits:
-              cpu: 500m
-              memory: 512Mi
-            requests:
-              cpu: 250m
-              memory: 256Mi
-          
-          autoscaling:
-            enabled: false
-            minReplicas: 2
-            maxReplicas: 10
-            targetCPUUtilizationPercentage: 80
+          microservice:
+            name: "${{ env.APP_NAME }}"
+            namespace: "${{ env.ENVIRONMENT }}"
+            image: "${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}"
+            port: 8000
+            replicas: 2
           EOF
           fi
           
