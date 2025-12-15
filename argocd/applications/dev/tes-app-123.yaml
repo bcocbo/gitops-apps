@@ -8,6 +8,7 @@ metadata:
   labels:
     environment: dev
     managed-by: backstage
+    app: prueba
 spec:
   project: dev
   
