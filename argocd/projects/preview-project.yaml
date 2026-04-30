@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: preview
+  namespace: argocd
+spec:
+  description: Proyecto para ambientes efímeros de preview (PRs)
+
+  # Repositorios permitidos
+  sourceRepos:
+    - 'https://github.com/bcocbo/*'
+    - '*'
+
+  # Destinos permitidos — namespaces dinámicos con prefijo preview-
+  destinations:
+    - namespace: 'preview-*'
+      server: https://kubernetes.default.svc
+
+  # Permitir crear Namespaces (necesario para CreateNamespace=true)
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+
+  namespaceResourceWhitelist:
+    - group: ''
+      kind: '*'
+    - group: 'apps'
+      kind: '*'
+    - group: 'batch'
+      kind: '*'
+    - group: 'networking.k8s.io'
+      kind: '*'
+    - group: 'autoscaling'
+      kind: '*'
+
+  # Sin restricciones de ventana — los previews se despliegan en cualquier momento
+  syncWindows:
+    - kind: allow
+      schedule: '* * * * *'
+      duration: 24h
+      applications:
+        - '*'

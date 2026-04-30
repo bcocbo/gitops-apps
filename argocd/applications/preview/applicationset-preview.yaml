@@ -1,0 +1,79 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: preview-apps
+  namespace: argocd
+spec:
+  generators:
+  - pullRequest:
+      github:
+        owner: bcocbo
+        repo: test-app123
+        labels:
+        - preview
+      requeueAfterSeconds: 60
+
+  template:
+    metadata:
+      name: 'preview-{{branch_slug}}-{{number}}'
+      namespace: argocd
+      labels:
+        environment: preview
+        pr-number: '{{number}}'
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: preview
+
+      sources:
+      # Source 1: Chart transversal + values base + parameters dinámicos
+      - repoURL: https://github.com/bcocbo/eks_baseline_chart_Helm
+        targetRevision: HEAD
+        path: .
+        helm:
+          releaseName: 'preview-{{branch_slug}}-{{number}}'
+          valueFiles:
+          - $values/values/preview/values.yaml
+          parameters:
+          # La imagen se construye con variables del PR Generator.
+          # El CI del repo de la app debe hacer push con tag: pr-{number}-{head_short_sha}
+          # para que coincida con este patrón.
+          - name: microservice.image
+            value: '226633502530.dkr.ecr.us-east-1.amazonaws.com/tes-app-123:pr-{{number}}-{{head_short_sha}}'
+          - name: microservice.name
+            value: 'preview-{{branch_slug}}-{{number}}'
+          - name: microservice.namespace
+            value: 'preview-{{branch_slug}}-{{number}}'
+          - name: configmap.data.ENVIRONMENT
+            value: 'preview'
+          - name: configmap.data.PR_NUMBER
+            value: '{{number}}'
+          - name: configmap.data.PR_BRANCH
+            value: '{{branch}}'
+          - name: microservice.labels.app
+            value: 'preview-{{branch_slug}}-{{number}}'
+
+      # Source 2: Repo gitops — SIEMPRE main, nunca se modifica
+      - repoURL: https://github.com/bcocbo/gitops-apps.git
+        targetRevision: main
+        ref: values
+
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: 'preview-{{branch_slug}}-{{number}}'
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+          allowEmpty: false
+        syncOptions:
+        - CreateNamespace=true
+        - PrunePropagationPolicy=foreground
+        - PruneLast=true
+        retry:
+          limit: 3
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 1m

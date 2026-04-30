@@ -1,0 +1,98 @@
+# =============================================================================
+# VALUES BASE PARA TODOS LOS AMBIENTES PREVIEW (efímeros)
+# =============================================================================
+# Este archivo se usa como base para TODOS los PRs.
+# Los valores dinámicos (image, namespace, nombre) se sobreescriben
+# vía helm.parameters en el ApplicationSet template.
+# =============================================================================
+
+microservice:
+  # name, namespace e image se sobreescriben por parameters del ApplicationSet
+  name: "preview-app"
+  namespace: "preview"
+  image: "placeholder:latest"
+  port: 8000
+  replicas: 1
+
+  serviceAccountName: "default"
+  automountServiceAccountToken: false
+
+  flags:
+    openTelemetry: false
+
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    fsGroup: 1001
+    seccompProfile: "RuntimeDefault"
+    capabilities:
+      drop:
+        - ALL
+
+  # Recursos reducidos para previews
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+
+  probes:
+    liveness:
+      enabled: true
+      httpGet:
+        path: /health
+        port: 8000
+        scheme: HTTP
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    readiness:
+      enabled: true
+      httpGet:
+        path: /health
+        port: 8000
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 3
+    startup:
+      enabled: false
+
+  labels:
+    environment: "preview"
+    team: "platform"
+    costCenter: "engineering"
+    projectName: "backstage-apps"
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+service:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+      portName: http
+
+configmap:
+  enabled: true
+  data:
+    ENVIRONMENT: "preview"
+
+hpa:
+  enabled: false
+
+gateway:
+  enabled: false
+
+virtualService:
+  enabled: false
