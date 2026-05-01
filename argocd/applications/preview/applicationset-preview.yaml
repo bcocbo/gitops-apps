@@ -39,7 +39,7 @@ spec:
           # El CI del repo de la app debe hacer push con tag: pr-{number}-{head_short_sha}
           # para que coincida con este patrón.
           - name: microservice.image
-            value: '226633502530.dkr.ecr.us-east-1.amazonaws.com/tes-app-123:pr-{{number}}-{{head_short_sha}}'
+            value:'226633502530.dkr.ecr.us-east-1.amazonaws.com/tes-app-123:pr-{{number}}-{{head_short_sha}}'
           - name: microservice.name
             value: 'preview-{{branch_slug}}-{{number}}'
           - name: microservice.namespace
