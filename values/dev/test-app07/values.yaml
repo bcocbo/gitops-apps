@@ -6,7 +6,7 @@ replicaCount: 1
 image:
   # Imagen custom - será actualizada por CI/CD
   repository: 226633502530.dkr.ecr.us-east-1.amazonaws.com/test-app07
-  tag: main-79c0a89-16
+  tag: main-19c31b4-20
   pullPolicy: Always
 nameOverride: "test-app07"
 fullnameOverride: "test-app07"
