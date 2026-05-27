@@ -8,7 +8,7 @@
 microservice:
   name: "test-app-0010"
   namespace: "dev"
-  image: "226633502530.dkr.ecr.us-east-1.amazonaws.com/test-app-0010:main-a69cb93-1"
+  image: "226633502530.dkr.ecr.us-east-1.amazonaws.com/test-app-0010:main-fc3fa69-56"
   port: 8000
   replicas: 2
   # Service Account
