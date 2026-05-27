@@ -8,7 +8,7 @@
 microservice:
   name: "tes-app-123"
   namespace: "dev"
-  image: "226633502530.dkr.ecr.us-east-1.amazonaws.com/tes-app-123:main-d7ce6d2-44"
+  image: "226633502530.dkr.ecr.us-east-1.amazonaws.com/tes-app-123:main-4c08f9d-49"
   port: 8000
   replicas: 1
   # Service Account
